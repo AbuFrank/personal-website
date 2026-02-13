@@ -1,10 +1,15 @@
+'use client'
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useRouter } from 'next/router';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+
+  const { route } = useRouter()
+  console.log('route ===> ', route)
 
   useEffect(() => {
     const handleScroll = () => {
