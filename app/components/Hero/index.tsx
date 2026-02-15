@@ -24,7 +24,7 @@ export default function Hero() {
             Lead Web Developer
           </h1>
           <p className="text-xl md:text-2xl text-blue-100 mb-10 max-w-3xl mx-auto leading-relaxed">
-            With over 10 years of experience building scalable web applications,
+            With over a decade of experience building scalable web applications,
             I specialize in modern JavaScript frameworks and responsive design.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

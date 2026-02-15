@@ -3,6 +3,7 @@
 interface Project {
   id: number;
   title: string;
+  slug: string;
   description: string;
   technologies: string[];
 }
@@ -25,9 +26,12 @@ export default function ProjectCard({ project }: { project: Project }) {
         </div>
       </div>
       <div className="px-6 pb-6">
-        <button className="w-full py-2 px-4 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-          View Details
-        </button>
+        <a href={`https://github.com/AbuFrank/${project.slug}`} target="_blank" rel="noopener noreferrer">
+
+          <button className="w-full py-2 px-4 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+            View Code
+          </button>
+        </a>
       </div>
     </div>
   );

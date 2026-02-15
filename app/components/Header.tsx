@@ -2,14 +2,20 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { useRouter } from 'next/router';
+import { usePathname } from 'next/navigation';
+
+const siteName = process.env.NEXT_PUBLIC_SITE_NAME
+
+const navLinks = [
+  { title: 'Home', slug: '' },
+  { title: 'Chess', slug: 'chess' },
+  { title: 'Space', slug: 'space' }
+]
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-
-  const { route } = useRouter()
-  console.log('route ===> ', route)
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -18,6 +24,9 @@ const Header = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const isModified = pathname === '/' && !scrolled;
+
 
   return (
     <header
@@ -28,27 +37,27 @@ const Header = () => {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="text-xl font-bold text-gray-800"
+          className={`text-xl font-bold ${isModified ? 'text-white' : 'text-gray-800'}`}
         >
-          <Link href="/">Your Name</Link>
+          <Link href="/">{siteName}</Link>
         </motion.div>
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex space-x-8">
-          {['Home', 'About', 'Projects', 'Contact'].map((item) => (
+          {navLinks.map((item) => (
             <Link
-              key={item}
-              href={`/${item.toLowerCase()}`}
-              className="text-gray-600 hover:text-blue-600 transition-colors"
+              key={item.title.toLowerCase()}
+              href={`/${item.slug}`}
+              className={`${isModified ? 'text-white' : 'text-gray-600'} hover:text-blue-600 transition-colors`}
             >
-              {item}
+              {item.title}
             </Link>
           ))}
         </nav>
 
         {/* Mobile Menu Button */}
         <button
-          className="md:hidden text-gray-600 focus:outline-none"
+          className={`md:hidden ${isModified ? 'text-white' : 'text-gray-600'} focus:outline-none`}
           onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -66,17 +75,17 @@ const Header = () => {
         <motion.div
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: 'auto' }}
-          className="md:hidden bg-white border-t"
+          className={`md:hidden ${isModified ? 'bg-transparent' : 'bg-white'} mt-4`}
         >
           <div className="container mx-auto px-4 py-3 flex flex-col space-y-3">
-            {['Home', 'About', 'Projects', 'Contact'].map((item) => (
+            {navLinks.map((item) => (
               <Link
-                key={item}
-                href={`/${item.toLowerCase()}`}
-                className="text-gray-600 hover:text-blue-600 py-2 transition-colors"
+                key={item.title.toLowerCase()}
+                href={`/${item.slug}`}
+                className={`${isModified ? 'text-white' : 'text-gray-600'} hover:text-blue-600 py-2 transition-colors`}
                 onClick={() => setIsMenuOpen(false)}
               >
-                {item}
+                {item.title}
               </Link>
             ))}
           </div>

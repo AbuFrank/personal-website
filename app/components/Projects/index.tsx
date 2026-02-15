@@ -4,44 +4,50 @@ import ProjectCard from '@/app/components/Projects/project-card';
 import { useState, useEffect } from 'react';
 
 export default function ProjectsPage() {
-  const [projects, setProjects] = useState([
+  const projects = [
     {
       id: 1,
-      title: 'E-commerce Platform',
-      description: 'A full-featured online shopping experience with payment integration and inventory management.',
-      technologies: ['React', 'Node.js', 'MongoDB', 'Stripe']
+      title: 'Bookkeeping App',
+      description: 'Tracks income and expense and generates a summary report.',
+      technologies: ['React', 'TypeScript', 'Firebase', 'Google Drive SDK'],
+      slug: 'bookr',
     },
     {
       id: 2,
-      title: 'Task Management App',
-      description: 'Collaborative task management tool with real-time updates and team features.',
-      technologies: ['Next.js', 'Firebase', 'Tailwind CSS']
+      title: 'Content Sharing App',
+      slug: 'TMERNG-redditish-server',
+      description: 'A Reddit-like content sharing app that allows posting, liking, and commenting.',
+      technologies: ['React', 'TypeScript', 'MongoDB', 'graphQL', 'Apollo', 'Tailwind CSS']
     },
     {
       id: 3,
-      title: 'Health & Fitness Tracker',
-      description: 'Mobile-first application for tracking workouts, nutrition, and health metrics.',
-      technologies: ['React Native', 'GraphQL', 'PostgreSQL']
+      title: 'AI Content Generator',
+      slug: 'ai-assistant',
+      description: 'Machine learning-powered content creation platform with natural language processing.',
+      technologies: ['Python', 'Ollama', 'Docker', 'React', 'Vite.js']
     },
     {
       id: 4,
-      title: 'Financial Dashboard',
-      description: 'Data visualization platform for financial analytics and reporting.',
-      technologies: ['Vue.js', 'D3.js', 'Python', 'Django']
+      title: 'Contentful TinyMCE Extension',
+      slug: 'Contentful-tinyMCE',
+      description: 'Transforms the long text field in Contentful into a rich text editor.',
+      technologies: ['React', 'Contentful APP SDK', 'TinyMCE']
     },
     {
       id: 5,
-      title: 'Social Media Analytics',
-      description: 'Comprehensive analytics tool for tracking social media performance across platforms.',
-      technologies: ['React', 'Express', 'Redis', 'Elasticsearch']
+      title: 'Restaurant App',
+      slug: 'tasting-counter-10',
+      description: 'Experiential restaurant website with custom booking and coupon features.',
+      technologies: ['Next.js', 'Firebase', 'Tailwind CSS'],
     },
     {
       id: 6,
-      title: 'AI Content Generator',
-      description: 'Machine learning-powered content creation platform with natural language processing.',
-      technologies: ['Python', 'TensorFlow', 'FastAPI', 'React']
-    }
-  ]);
+      title: 'Rust Authentication Server',
+      slug: 'Rust-Authentication-Server',
+      description: 'A secure authentication server built entirely with Rust.',
+      technologies: ['Rust'],
+    },
+  ];
 
   const [isVisible, setIsVisible] = useState(false);
 
@@ -55,7 +61,7 @@ export default function ProjectsPage() {
         <div className={`text-center mb-16 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <h1 className="text-4xl font-bold text-gray-900 mb-4">My Projects</h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Here are some of my recent projects that showcase my skills and expertise in full-stack development.
+            Here are some of my projects that showcase my skills and expertise in full-stack web development.
           </p>
         </div>
 

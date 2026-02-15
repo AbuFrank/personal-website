@@ -1,26 +1,31 @@
-import { Button } from '@/app/components/Button';
 import DateDisplay from '@/app/components/Date';
-import { fetchChessStats } from './data';
+import { ChessStats } from '@/types/chess';
 
-const chessStats = await fetchChessStats('example');
+export default async function ChessStatsPage() {
 
-export default function ChessStatsPage() {
+  const username = process.env.CHESS_USERNAME;
+  const response = await fetch(`https://api.chess.com/pub/player/${username}/stats`, {
+    next: { revalidate: 3600 * 12 }
+  });
 
-  // "chess_rapid": {
-  //   "last": {
-  //     "rating": 1653, "date": 1770763303, "rd": 21
-  //   },
-  //   "best": {
-  //     "rating": 1764, "date": 1758886532, "game": "https://www.chess.com/game/live/143584448296"
-  //   },
-  //   "record": { "win": 4933, "loss": 4853, "draw": 398 }
-  // },
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch chess stats: ${response.status}`);
+  }
+
+  const chessStats: ChessStats = await response.json();
 
   const { chess_rapid } = chessStats;
+
+  if (!chess_rapid) {
+    return <div className="py-20">
+      <h1 className="text-center">No Stats for provided userName</h1>
+    </div>
+  }
   const { last, best, record } = chess_rapid;
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 pt-20">
       <h1 className="text-3xl font-bold mb-6">Chess Statistics</h1>
 
       <div className="mb-8 p-6 bg-white rounded-lg shadow-md">
@@ -29,9 +34,7 @@ export default function ChessStatsPage() {
           {/* Last Rating */}
           <div className="p-4 bg-blue-50 rounded-lg">
             <h3 className="font-semibold text-blue-800">Last Rating</h3>
-            <p className="text-2xl font-bold">{last.rating}</p>
-
-            <p className="text-sm text-gray-600">RD: {last.rd}</p>
+            <p> <span className="text-2xl font-bold">{last.rating}</span><span> &#40;RD: {last.rd}&#41;</span></p>
             <DateDisplay
               date={last.date * 1000}
               format="short"
@@ -57,10 +60,6 @@ export default function ChessStatsPage() {
               >
                 View Game
               </a>
-              {/* 
-              <Button variant="primary" href={best.game} target="_blank" rel="noopener noreferrer">
-                View Game
-              </Button> */}
             </div>
 
           </div>
