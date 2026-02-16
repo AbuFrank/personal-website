@@ -25,7 +25,7 @@ const Header = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const isModified = pathname === '/' && !scrolled;
+  const isModified = (pathname === '/' || pathname === '/space') && !scrolled;
 
 
   return (

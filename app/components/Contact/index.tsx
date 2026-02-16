@@ -1,4 +1,4 @@
-import React from 'react';
+const linkedinUrl = process.env.NEXT_PUBLIC_LINKEDIN_URL
 
 const ContactPage = () => {
   return (
@@ -50,8 +50,9 @@ const ContactPage = () => {
                     </svg>
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold mb-1">Office</h3>
-                    <p className="text-blue-100">123 Business Ave, Suite 100<br />San Francisco, CA 94107</p>
+                    <h3 className="text-lg font-semibold mb-1">LinkedIn</h3>
+                    <a href={linkedinUrl} target="_blank" rel="noopener noreferrer">
+                      <p className="text-blue-100">{linkedinUrl}</p></a>
                   </div>
                 </div>
 

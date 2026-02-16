@@ -1,22 +1,21 @@
-'use client';
-
 interface Skill {
+  color: string;
   name: string;
-  level: number;
+  totalLines: number;
 }
 
-export default function SkillItem({ skill }: { skill: Skill }) {
+export default function SkillItem({ lang }: { lang: Skill }) {
   return (
-    <div className="mb-6 w-full">
-      <div className="flex justify-between mb-2">
-        <h3 className="font-medium text-gray-900">{skill.name}</h3>
-        <span className="font-semibold text-blue-600">{skill.level}%</span>
-      </div>
-      <div className="w-full bg-gray-200 rounded-full h-2.5">
+    <div key={lang.name} className="bg-gray-50 p-4 rounded-lg">
+      <div className="flex items-center mb-2">
         <div
-          className="bg-linear-to-r from-blue-500 to-blue-600 h-2.5 rounded-full transition-all duration-1000 ease-out"
-          style={{ width: `${skill.level}%` }}
+          className="w-4 h-4 rounded-full mr-2"
+          style={{ backgroundColor: lang.color }}
         ></div>
+        <span className="font-medium">{lang.name}</span>
+      </div>
+      <div className="text-sm text-gray-600">
+        Total lines: {lang.totalLines.toLocaleString()}
       </div>
     </div>
   );
