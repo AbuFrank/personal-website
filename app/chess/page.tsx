@@ -67,7 +67,7 @@ export default async function ChessStatsPage() {
           {/* Record */}
           <div className="p-4 bg-gray-50 rounded-lg">
             <h3 className="font-semibold text-gray-800">Record</h3>
-            <p className="text-lg"><span className='text-green-600'>W:</span> {record.win} | <span className="text-red-600">L:</span> {record.loss} | <span className="text-brown-600">D</span>: {record.draw}</p>
+            <p className="text-lg"><span className='text-green-600'>W:</span> {record.win} | <span className="text-red-600">L:</span> {record.loss} | <span className="text-gray-600">D</span>: {record.draw}</p>
           </div>
         </div>
       </div>
