@@ -1,3 +1,5 @@
+import ContactForm from "./contact-form";
+
 const linkedinUrl = process.env.NEXT_PUBLIC_LINKEDIN_URL
 
 const ContactPage = () => {
@@ -18,18 +20,6 @@ const ContactPage = () => {
               <h2 className="text-2xl font-bold mb-6">Get in Touch</h2>
 
               <div className="space-y-6">
-                {/* <div className="flex items-start">
-                  <div className="shrink-0 bg-blue-500 p-3 rounded-full mr-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold mb-1">Phone</h3>
-                    <p className="text-blue-100">+1 (555) 123-4567</p>
-                  </div>
-                </div> */}
-
                 <div className="flex items-start">
                   <div className="shrink-0 bg-blue-500 p-3 rounded-full mr-4">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -38,7 +28,7 @@ const ContactPage = () => {
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold mb-1">Email</h3>
-                    <p className="text-blue-100">contact@company.com</p>
+                    <p className="text-blue-100">{process.env.NEXT_PUBLIC_EMAIL}</p>
                   </div>
                 </div>
 
@@ -57,7 +47,7 @@ const ContactPage = () => {
                 </div>
 
                 <div className="pt-4">
-                  <h3 className="text-lg font-semibold mb-4">Business Hours</h3>
+                  <h3 className="text-lg font-semibold mb-4">Availability</h3>
                   <ul className="space-y-2 text-blue-100">
                     <li className="flex justify-between">
                       <span>Monday - Friday</span>
@@ -69,11 +59,15 @@ const ContactPage = () => {
                     </li>
                     <li className="flex justify-between">
                       <span>Sunday</span>
-                      <span>Closed</span>
+                      <span>Gone Fishing</span>
                     </li>
                   </ul>
                 </div>
               </div>
+            </div>
+            {/* Contact Form */}
+            <div className="md:w-1/2 p-8 md:p-12">
+              <ContactForm />
             </div>
           </div>
         </div>

@@ -4,7 +4,6 @@ export async function GET() {
   try {
     const today = new Date().toISOString().split('T')[0];
 
-    // This will cache the API response for 12 hours across your entire app
     const response = await fetch(
       `https://api.nasa.gov/planetary/apod?api_key=${process.env.NASA_API_KEY}`,
       {
@@ -20,6 +19,22 @@ export async function GET() {
     }
 
     const data = await response.json();
+
+    // Ensure we have required fields
+    if (!data.url || !data.title) {
+      throw new Error('Incomplete APOD data received');
+    }
+
+    // Convert date to NASA HTML format: 2026-02-26 → ap260225.html
+    if (data.date) {
+      const dateParts = data.date.split('-');
+      const year = dateParts[0].slice(2); // Get last 2 digits of year
+      const month = dateParts[1];
+      const day = dateParts[2];
+
+      // Format: apYYMMDD.html
+      data.nasa_html_url = `https://apod.nasa.gov/apod/ap${year}${month}${day}.html`;
+    }
 
     return NextResponse.json(data);
   } catch (error) {
