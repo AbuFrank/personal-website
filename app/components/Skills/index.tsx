@@ -27,7 +27,7 @@ async function GitHubStats() {
   return (
     <>
       {/* Language Breakdown */}
-      <div className="py-5 max-w-3/4 mx-auto">
+      <div className="py-5 sm:max-w-3/4 mx-auto">
         <h2 className="text-xl text-center font-semibold mb-1">Languages Used</h2>
         <p className="text-center font-normal text-md mb-4">(From Public Repos)</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
@@ -38,7 +38,7 @@ async function GitHubStats() {
       </div>
 
       {/* Pie Chart */}
-      <div className="mb-8 max-w-3/4 mx-auto">
+      <div className="mb-8 sm:max-w-3/4 mx-auto">
         <h2 className="text-xl text-center font-semibold mb-4">Language Distribution</h2>
         <div className="bg-white p-6 rounded-lg shadow">
           <CodingPieChart languageData={stats.languages} />

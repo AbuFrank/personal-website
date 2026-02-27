@@ -25,12 +25,12 @@ const Header = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const isModified = (pathname === '/' || pathname === '/space') && !scrolled;
+  const isModified = (pathname === '/' || pathname === '/space') && !scrolled && !isMenuOpen;
 
 
   return (
     <header
-      className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-white/90 backdrop-blur-sm py-2 shadow-md' : 'bg-transparent py-4'
+      className={`fixed w-full z-50 transition-all duration-300 ${(scrolled || isMenuOpen) ? 'bg-white/90 backdrop-blur-sm py-2 shadow-md' : 'bg-transparent py-4'
         }`}
     >
       <div className="container mx-auto px-4 flex justify-between items-center">
@@ -75,7 +75,7 @@ const Header = () => {
         <motion.div
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: 'auto' }}
-          className={`md:hidden ${isModified ? 'bg-transparent' : 'bg-white'} mt-4`}
+          className='md:hidden bg-white mt-4'
         >
           <div className="container mx-auto px-4 py-3 flex flex-col space-y-3">
             {navLinks.map((item) => (

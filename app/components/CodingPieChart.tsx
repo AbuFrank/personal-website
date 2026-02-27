@@ -64,7 +64,7 @@ const CodingPieChart = ({ languageData }: CodingPieChartProps) => {
   };
 
   return (
-    <div className="w-full h-80">
+    <div className="w-full h-100 sm:h-80">
       <Pie data={chartData} options={options} />
     </div>
   );
