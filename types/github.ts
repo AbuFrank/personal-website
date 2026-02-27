@@ -1,22 +1,3 @@
-interface GitHubStats {
-  user: {
-    contributionsCollection: {
-      contributionCalendar: {
-        totalContributions: number;
-        weeks: {
-          contributionDays: {
-            date: string;
-            contributionCount: number;
-          }[];
-        }[];
-      };
-    };
-    repositories: {
-      nodes: RepositoryNode[];
-    };
-  };
-}
-
 interface RepositoryNode {
   name: string;
   languages: {
@@ -32,7 +13,6 @@ interface LanguageEdge {
   size: number;
 }
 
-// Alternative more specific interface for the processed data
 interface ProcessedLanguageData {
   name: string;
   totalLines: number;

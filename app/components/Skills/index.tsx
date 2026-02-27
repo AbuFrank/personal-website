@@ -21,19 +21,17 @@ function SkillsSkeleton() {
 }
 
 async function GitHubStats() {
-  const stats = await getGitHubStats("AbuFrank");
-  const typedStats = stats as GitHubStats;
+  const stats = await getGitHubStats(["AbuFrank", "rthornoxford"]);
 
-  // Process language data
-  const languageData = processLanguageData(typedStats.user.repositories.nodes);
 
   return (
     <>
       {/* Language Breakdown */}
-      <div className="py-10 max-w-3/4 mx-auto">
-        <h2 className="text-xl text-center font-semibold mb-4">Languages Used</h2>
+      <div className="py-5 max-w-3/4 mx-auto">
+        <h2 className="text-xl text-center font-semibold mb-1">Languages Used</h2>
+        <p className="text-center font-normal text-md mb-4">(From Public Repos)</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-          {languageData.map(lang =>
+          {stats.languages.map(lang =>
             <SkillItem key={lang.name} lang={lang} />
           )}
         </div>
@@ -43,35 +41,11 @@ async function GitHubStats() {
       <div className="mb-8 max-w-3/4 mx-auto">
         <h2 className="text-xl text-center font-semibold mb-4">Language Distribution</h2>
         <div className="bg-white p-6 rounded-lg shadow">
-          <CodingPieChart languageData={languageData} />
+          <CodingPieChart languageData={stats.languages} />
         </div>
       </div>
     </>
   );
-}
-
-function processLanguageData(repositories: any[]) {
-  const languageMap: Record<string, { totalLines: number; color: string }> = {};
-
-  repositories.forEach((repo) => {
-    if (repo.languages && repo.languages.edges) {
-      repo.languages.edges.forEach((edge: any) => {
-        const langName = edge.node.name;
-        const langColor = edge.node.color;
-        const lines = edge.size;
-
-        if (!languageMap[langName]) {
-          languageMap[langName] = { totalLines: 0, color: langColor };
-        }
-        languageMap[langName].totalLines += lines;
-      });
-    }
-  });
-
-  // Convert to array and sort by line count
-  return Object.entries(languageMap)
-    .map(([name, data]) => ({ name, ...data }))
-    .sort((a, b) => b.totalLines - a.totalLines);
 }
 
 export default async function GitHubStatsPage() {
