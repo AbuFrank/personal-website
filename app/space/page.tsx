@@ -1,52 +1,51 @@
-'use client'
-import { useEffect, useState } from "react";
 
-export default function APODContent() {
-  const [stars, setStars] = useState<Array<{ x: number, y: number, size: number }>>([]);
-  const [apodData, setApodData] = useState<any>(null);
-  const [loading, setLoading] = useState(true)
+export default async function APODContent() {
+  // const [stars, setStars] = useState<Array<{ x: number, y: number, size: number }>>([]);
+  // const [apodData, setApodData] = useState<any>(null);
+  // const [loading, setLoading] = useState(true)
 
-  // const apodData = await getAstronomyPictureOfTheDay();
-
-  useEffect(() => {
-    // Fetch apod data
-    const fetchData = async () => {
-      try {
-        const response = await fetch('/api/apod',
-          {
-            next: {
-              revalidate: 43200, // 12 hours in seconds (12 * 60 * 60)
-            }
-          }
-        );
-        const data = await response.json();
-        setApodData(data);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching APOD data:', error);
+  const response = await fetch(
+    `https://api.nasa.gov/planetary/apod?api_key=${process.env.NASA_API_KEY}`,
+    {
+      next: {
+        revalidate: 43200, // 12 hours in seconds
+        tags: ['apod', 'nasa'] // Cache tags for invalidation
       }
-    };
+    }
+  );
 
-    // Generate random stars
-    const generateStars = () => {
-      const starsArray = [];
-      const starCount = 150; // Adjust density as needed
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
 
-      for (let i = 0; i < starCount; i++) {
-        starsArray.push({
-          x: Math.random() * 100,
-          y: Math.random() * 100,
-          size: Math.random() * 3 + 1 // Random size between 1-4px
-        });
-      }
+  const apodData = await response.json();
 
-      setStars(starsArray);
-    };
+  // Ensure we have required fields
+  if (!apodData.url || !apodData.title) {
+    throw new Error('Incomplete APOD data received');
+  }
 
-    generateStars();
-    fetchData();
-  }, []);
+  // Convert date to NASA HTML format: 2026-02-26 → ap260225.html
+  if (apodData.date) {
+    const dateParts = apodData.date.split('-');
+    const year = dateParts[0].slice(2); // Get last 2 digits of year
+    const month = dateParts[1];
+    const day = dateParts[2];
 
+    // Format: apYYMMDD.html
+    apodData.nasa_html_url = `https://apod.nasa.gov/apod/ap${year}${month}${day}.html`;
+  }
+
+  const stars = [];
+  const starCount = 150; // Star density
+
+  for (let i = 0; i < starCount; i++) {
+    stars.push({
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      size: Math.random() * 3 + 1 // Random size between 1-4px
+    });
+  }
 
   return (
     <div className="min-h-screen bg-linear-to-b from-gray-900 to-black text-white pt-20 pb-12">
@@ -67,7 +66,7 @@ export default function APODContent() {
           />
         ))}
       </div>
-      {!loading && !!apodData ? <div className="container mx-auto px-4 max-w-6xl relative z-10">
+      {!!apodData ? <div className="container mx-auto px-4 max-w-6xl relative z-10">
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">Astronomy Picture of the Day</h1>
           <p className="text-xl text-gray-300">Explore the wonders of our universe</p>
@@ -107,7 +106,24 @@ export default function APODContent() {
 
               <div className="lg:w-1/2">
                 <h2 className="text-3xl font-bold mb-4">{apodData.title}</h2>
-                <p className="text-gray-400 mb-6">{apodData.date}</p>
+                <p className="text-gray-400 mb-4">{apodData.date}</p>
+
+                {apodData.nasa_html_url && (
+                  <div className="mb-4">
+                    <a
+                      href={apodData.nasa_html_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center text-blue-300 hover:text-blue-100 transition-colors duration-200"
+                    >
+                      View Full NASA Page
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />
+                        <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
+                      </svg>
+                    </a>
+                  </div>
+                )}
 
                 {apodData.explanation && (
                   <div className="space-y-4">

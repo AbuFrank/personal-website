@@ -1,7 +1,4 @@
-'use client';
-
 import ProjectCard from '@/app/components/Projects/project-card';
-import { useState, useEffect } from 'react';
 
 export default function ProjectsPage() {
   const projects = [
@@ -21,9 +18,9 @@ export default function ProjectsPage() {
     },
     {
       id: 3,
-      title: 'AI Content Generator',
+      title: 'AI Dev Kit',
       slug: 'ai-assistant',
-      description: 'Machine learning-powered content creation platform with natural language processing.',
+      description: 'A Dockerized AI development stack optimized for NVIDIA GPU acceleration.',
       technologies: ['Python', 'Ollama', 'Docker', 'React', 'Vite.js']
     },
     {
@@ -49,16 +46,11 @@ export default function ProjectsPage() {
     },
   ];
 
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    setIsVisible(true);
-  }, []);
 
   return (
     <div id="projects" className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        <div className={`text-center mb-16 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+        <div className='text-center mb-16'>
           <h1 className="text-4xl font-bold text-gray-900 mb-4">My Projects</h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             Here are some of my projects that showcase my skills and expertise in full-stack web development.
@@ -69,7 +61,6 @@ export default function ProjectsPage() {
           {projects.map((project, index) => (
             <div
               key={project.id}
-              className={`transition-all duration-500 delay-${index * 100} ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
             >
               <ProjectCard project={project} />
             </div>

@@ -1,13 +1,5 @@
-'use client';
-
-import { useEffect, useState } from 'react';
 
 export default function Hero() {
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
 
   return (
     <section className="relative bg-linear-to-br from-blue-900 via-purple-900 to-indigo-900 min-h-screen flex items-center justify-center overflow-hidden">
@@ -19,13 +11,13 @@ export default function Hero() {
       </div>
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className={`text-center max-w-4xl mx-auto transition-all duration-1000 ${isMounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+        <div className='text-center max-w-4xl mx-auto'>
           <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">
             Lead Web Developer
           </h1>
           <p className="text-xl md:text-2xl text-blue-100 mb-10 max-w-3xl mx-auto leading-relaxed">
             With over a decade of experience building scalable web applications,
-            I specialize in modern JavaScript frameworks and responsive design.
+            I specialize in modern JavaScript frameworks, information architecture, and responsive design.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
