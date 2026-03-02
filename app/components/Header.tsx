@@ -25,19 +25,53 @@ const Header = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const isModified = (pathname === '/' || pathname === '/space') && !scrolled && !isMenuOpen;
+  // Determine header class based on conditions
+  const getHeaderClass = () => {
+    // Scenario 1: Transparent header (white text) - Home or Space pages, not scrolled, menu closed
+    if ((pathname === '/' || pathname === '/space') && !scrolled && !isMenuOpen) {
+      return 'bg-transparent py-4';
+    }
 
+    // Scenario 2: Scrolled header (white background with dark text)
+    if (scrolled || isMenuOpen) {
+      return 'bg-white/90 backdrop-blur-sm py-2 shadow-md';
+    }
+
+    // Default scenario (white background with dark text)
+    return 'bg-white py-4 shadow-sm';
+  };
+
+  // Determine text color class
+  const getTextColorClass = () => {
+    // Transparent header case - white text
+    if ((pathname === '/' || pathname === '/space') && !scrolled && !isMenuOpen) {
+      return 'text-white';
+    }
+
+    // All other cases - dark text
+    return 'text-gray-800';
+  };
+
+  // Determine link color class
+  const getLinkClass = () => {
+    // Transparent header case - white text
+    if ((pathname === '/' || pathname === '/space') && !scrolled && !isMenuOpen) {
+      return 'text-white hover:text-blue-300';
+    }
+
+    // All other cases - dark text
+    return 'text-gray-600 hover:text-blue-600';
+  };
 
   return (
     <header
-      className={`fixed w-full z-50 transition-all duration-300 ${(scrolled || isMenuOpen) ? 'bg-white/90 backdrop-blur-sm py-2 shadow-md' : 'bg-transparent py-4'
-        }`}
+      className={`fixed w-full z-50 transition-all duration-300 ${getHeaderClass()}`}
     >
       <div className="container mx-auto px-4 flex justify-between items-center">
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className={`text-xl font-bold ${isModified ? 'text-white' : 'text-gray-800'}`}
+          className={`text-xl font-bold ${getTextColorClass()}`}
         >
           <Link href="/">{siteName}</Link>
         </motion.div>
@@ -48,7 +82,7 @@ const Header = () => {
             <Link
               key={item.title.toLowerCase()}
               href={`/${item.slug}`}
-              className={`${isModified ? 'text-white' : 'text-gray-600'} hover:text-blue-600 transition-colors`}
+              className={`${getLinkClass()} hover:text-blue-600 transition-colors`}
             >
               {item.title}
             </Link>
@@ -57,7 +91,7 @@ const Header = () => {
 
         {/* Mobile Menu Button */}
         <button
-          className={`md:hidden ${isModified ? 'text-white' : 'text-gray-600'} focus:outline-none`}
+          className={`md:hidden ${getLinkClass()} focus:outline-none`}
           onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -82,7 +116,7 @@ const Header = () => {
               <Link
                 key={item.title.toLowerCase()}
                 href={`/${item.slug}`}
-                className={`${isModified ? 'text-white' : 'text-gray-600'} hover:text-blue-600 py-2 transition-colors`}
+                className={`${getLinkClass()} hover:text-blue-600 py-2 transition-colors`}
                 onClick={() => setIsMenuOpen(false)}
               >
                 {item.title}

@@ -1,15 +1,11 @@
 
 export default async function APODContent() {
-  // const [stars, setStars] = useState<Array<{ x: number, y: number, size: number }>>([]);
-  // const [apodData, setApodData] = useState<any>(null);
-  // const [loading, setLoading] = useState(true)
 
   const response = await fetch(
     `https://api.nasa.gov/planetary/apod?api_key=${process.env.NASA_API_KEY}`,
     {
       next: {
-        revalidate: 43200, // 12 hours in seconds
-        tags: ['apod', 'nasa'] // Cache tags for invalidation
+        revalidate: 21600, // every 6 hours in seconds
       }
     }
   );
@@ -20,10 +16,20 @@ export default async function APODContent() {
 
   const apodData = await response.json();
 
-  // Ensure we have required fields
-  if (!apodData.url || !apodData.title) {
-    throw new Error('Incomplete APOD data received');
+  // Fallback data in case it's an invalid response or not a typical image
+  const fallbackData = {
+    "date": "2025-10-07",
+    "explanation": "Now a second supernova in this same galaxy is repeating. The cause is the gravitational lens effect of a massive foreground cluster of galaxies (MACS J0138) -- it creates multiple images of a perfectly aligned background galaxy (MRG-M0138). What's particularly interesting is that this background galaxy has young stars that keep blowing up. And images of each supernova explosion keep coming to us multiple times through different paths through the cluster. The original lensed supernova set, shown in the rollover, is called Requiem and was first seen by the Hubble Space Telescope in 2016.  This second lensed supernova set is called Encore and was first seen by the Webb Space Telescope in 2023.  More images from these supernovas are predicted to be on the way, and exactly when they arrive should help humanity to better understand the mass distribution of the galaxy cluster, the supernovas themselves, and possibly even the universe.",
+    "hdurl": "https://apod.nasa.gov/apod/image/2510/SupernovaLens_webb_1394.jpg",
+    "media_type": "image",
+    "service_version": "v1",
+    "title": "SN Encore: A Second Supernova Seen Several Times",
+    "url": "https://apod.nasa.gov/apod/image/2510/SupernovaLens_webb_960.jpg"
   }
+
+  const isValidVideo = apodData.media_type === 'video' && apodData.url.match(/\.(mp4|webm)$/i);
+
+  const finalData = !!apodData.url && !!apodData.title && (apodData.media_type === 'image' || isValidVideo) ? apodData : fallbackData
 
   // Convert date to NASA HTML format: 2026-02-26 → ap260225.html
   if (apodData.date) {
@@ -66,7 +72,7 @@ export default async function APODContent() {
           />
         ))}
       </div>
-      {!!apodData ? <div className="container mx-auto px-4 max-w-6xl relative z-10">
+      {!!finalData ? <div className="container mx-auto px-4 max-w-6xl relative z-10">
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">Astronomy Picture of the Day</h1>
           <p className="text-xl text-gray-300">Explore the wonders of our universe</p>
@@ -74,44 +80,47 @@ export default async function APODContent() {
 
         <div className="bg-gray-800 rounded-xl overflow-hidden shadow-2xl">
           <div className="p-6 md:p-8">
-            <div className="flex flex-col lg:flex-row gap-8">
-              <div className="lg:w-1/2">
-                {apodData.media_type === 'image' ? (
+            <div className={`flex flex-col ${!isValidVideo ? 'lg:flex-row' : ''} gap-8`}>
+              {finalData.media_type === 'image' ? (
+                <div className="lg:w-1/2">
                   <div className="relative rounded-lg overflow-hidden">
                     <img
-                      src={apodData.url}
-                      alt={apodData.title}
+                      src={finalData.url}
+                      alt={finalData.title}
                       className="w-full h-auto object-cover"
                       width={600}
                       height={400}
                     />
-                    {apodData.copyright && (
+                    {finalData.copyright && (
                       <div className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-black to-transparent p-4">
-                        <p className="text-sm text-gray-300">© {apodData.copyright}</p>
+                        <p className="text-sm text-gray-300">© {finalData.copyright}</p>
                       </div>
                     )}
                   </div>
-                ) : (
-                  <div className="relative rounded-lg overflow-hidden h-96 flex items-center justify-center bg-gray-900">
-                    <iframe
-                      src={apodData.url}
-                      title={apodData.title}
-                      className="w-full h-full"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                    />
-                  </div>
-                )}
-              </div>
+                </div>
+              ) : (
+                // Handle video content
+                <div className="w-full mb-2">
+                  <video
+                    src={finalData.url}
+                    controls
+                    className="w-full h-auto max-w-full"
+                    poster={finalData.thumbnail_url || undefined}
+                  >
+                    Your browser does not support the video tag.
+                  </video>
 
-              <div className="lg:w-1/2">
-                <h2 className="text-3xl font-bold mb-4">{apodData.title}</h2>
-                <p className="text-gray-400 mb-4">{apodData.date}</p>
+                </div>
+              )}
 
-                {apodData.nasa_html_url && (
+              <div className={!isValidVideo ? "lg:w-1/2" : ''}>
+                <h2 className="text-3xl font-bold mb-4">{finalData.title}</h2>
+                <p className="text-gray-400 mb-4">{finalData.date}</p>
+
+                {finalData.nasa_html_url && (
                   <div className="mb-4">
                     <a
-                      href={apodData.nasa_html_url}
+                      href={finalData.nasa_html_url}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center text-blue-300 hover:text-blue-100 transition-colors duration-200"
@@ -125,14 +134,14 @@ export default async function APODContent() {
                   </div>
                 )}
 
-                {apodData.explanation && (
+                {finalData.explanation && (
                   <div className="space-y-4">
-                    <p className="text-lg leading-relaxed">{apodData.explanation}</p>
+                    <p className="text-lg leading-relaxed">{finalData.explanation}</p>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-                      {apodData.hdurl && (
+                      {finalData.hdurl && (
                         <a
-                          href={apodData.hdurl}
+                          href={finalData.hdurl}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-colors duration-300"
@@ -154,9 +163,9 @@ export default async function APODContent() {
               </div>
             </div>
 
-            {apodData.service_version && (
+            {finalData.service_version && (
               <div className="mt-8 pt-6 border-t border-gray-700">
-                <p className="text-sm text-gray-500">Service Version: {apodData.service_version}</p>
+                <p className="text-sm text-gray-500">Service Version: {finalData.service_version}</p>
               </div>
             )}
           </div>
