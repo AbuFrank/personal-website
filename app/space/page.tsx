@@ -10,10 +10,6 @@ export default async function APODContent() {
     }
   );
 
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-
   const apodData = await response.json();
 
   // Fallback data in case it's an invalid response or not a typical image
