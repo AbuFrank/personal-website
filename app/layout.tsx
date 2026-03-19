@@ -17,6 +17,12 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: 'Riley Thornton - Lead Web Developer',
   description: 'Personal portfolio',
+  icons: {
+    icon: '/favicon.ico?v=1',
+    shortcut: '/favicon-16x16.png?v=1',
+    apple: '/apple-touch-icon.png?v=1',
+  },
+  manifest: '/manifest.json?v=1',
 };
 
 export default function RootLayout({
