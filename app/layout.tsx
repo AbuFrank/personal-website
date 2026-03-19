@@ -18,11 +18,11 @@ export const metadata: Metadata = {
   title: 'Riley Thornton - Lead Web Developer',
   description: 'Personal portfolio',
   icons: {
-    icon: '/favicon.ico?v=1',
-    shortcut: '/favicon-16x16.png?v=1',
-    apple: '/apple-touch-icon.png?v=1',
+    icon: '/icon.ico',
+    shortcut: '/favicon-16x16.png',
+    apple: '/apple-touch-icon.png',
   },
-  manifest: '/manifest.json?v=1',
+  manifest: '/manifest.json',
 };
 
 export default function RootLayout({
