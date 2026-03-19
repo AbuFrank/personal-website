@@ -27,9 +27,9 @@ async function GitHubStats() {
   return (
     <>
       {/* Language Breakdown */}
-      <div className="py-5 sm:max-w-3/4 mx-auto">
-        <h2 className="text-xl text-center font-semibold mb-1">Languages Used</h2>
-        <p className="text-center font-normal text-md mb-4">(From Public Repos)</p>
+      <div className="pt-3 pb-5 sm:max-w-3/4 mx-auto">
+        <h2 className="text-xl text-center font-semibold mb-4">Languages Used (From Public Repos)</h2>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {stats.languages.map(lang =>
             <SkillItem key={lang.name} lang={lang} />
@@ -40,7 +40,7 @@ async function GitHubStats() {
       {/* Pie Chart */}
       <div className="mb-8 sm:max-w-3/4 mx-auto">
         <h2 className="text-xl text-center font-semibold mb-4">Language Distribution</h2>
-        <div className="bg-white p-6 rounded-lg shadow">
+        <div className="bg-white pb-6 rounded-lg shadow">
           <CodingPieChart languageData={stats.languages} />
         </div>
       </div>
